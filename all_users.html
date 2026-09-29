@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}FitBuddy AI - Admin Dashboard{% endblock %}
+
+{% block content %}
+<section class="result-header">
+    <div>
+        <div class="badge">👨‍💼 Admin Dashboard</div>
+        <h1>All FitBuddy Users</h1>
+        <p>Review registered users and their AI-generated plans.</p>
+    </div>
+</section>
+
+<section class="stats-grid">
+    <div class="stat-card">
+        <span class="stat-icon">👥</span>
+        <div><span class="stat-label">Total Users</span><strong>{{ users|length }}</strong></div>
+    </div>
+    <div class="stat-card">
+        <span class="stat-icon">🤖</span>
+        <div><span class="stat-label">AI Plans</span><strong>{{ users|length }}</strong></div>
+    </div>
+</section>
+
+{% if users %}
+<div class="users-container">
+{% for user in users %}
+<section class="card user-card">
+    <div class="user-card-header">
+        <div>
+            <h2>{{ user.name }}</h2>
+            <p>User ID: {{ user.user_id }}</p>
+        </div>
+        <span class="goal-badge">{{ user.goal }}</span>
+    </div>
+
+    <div class="user-details">
+        <div><strong>Age</strong><span>{{ user.age }}</span></div>
+        <div><strong>Weight</strong><span>{{ user.weight }} kg</span></div>
+        <div><strong>Intensity</strong><span>{{ user.intensity }}</span></div>
+        <div><strong>Created</strong><span>{{ user.created_at.strftime('%Y-%m-%d %H:%M') }}</span></div>
+    </div>
+
+    <div class="admin-plans">
+        <div class="admin-plan">
+            <h3>Original Workout Plan</h3>
+            <pre>{{ user.original_plan }}</pre>
+        </div>
+
+        {% if user.updated_plan %}
+        <div class="admin-plan updated-plan">
+            <h3>Updated Workout Plan</h3>
+            <pre>{{ user.updated_plan }}</pre>
+        </div>
+        {% else %}
+        <div class="no-update"><p>No feedback-based update has been submitted.</p></div>
+        {% endif %}
+
+        {% if user.feedback %}
+        <div class="admin-feedback">
+            <h3>User Feedback</h3>
+            <p>{{ user.feedback }}</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endfor %}
+</div>
+{% else %}
+<section class="card empty-state">
+    <div class="empty-icon">🧘</div>
+    <h2>No users yet</h2>
+    <p>Generate your first FitBuddy plan to see users here.</p>
+    <a href="/" class="btn btn-primary">Create First Plan</a>
+</section>
+{% endif %}
+{% endblock %}
